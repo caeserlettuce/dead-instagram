@@ -1,6 +1,16 @@
 var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
+addParameter("name");
+
+function pushState() {
+    let stateObj = { id: "100" };
+    window.history.replaceState(stateObj,
+                "Page 3", "/page3.html");
+}
+
+var default_share_url = "https://dapug.lol/instagram";
+var share_url = "https://dapug.lol/instagram";
 
 function getRandomFromArr(inArray) {
     // gets random element from array
@@ -20,7 +30,9 @@ function setSuggest(name) {
 function generate() {
     console.log("changing name!!!");
     var name = document.getElementById("namehaha").value;
-    if (name == "" || name == undefined || name == null) {
+    share_url = `${default_share_url}?name=${name}`;
+    history.replaceState({page: 3}, "dead instagram", `?name=${name}`);
+    if (name == "" || name == undefined || name == null || name.indexOf(' ') > -1) {
         name = `${randName}`;
     }
     setName(`${name}`);
@@ -38,6 +50,23 @@ function resizeText() {
     }
 }
 
+function randomName() {
+    var randName = getRandomFromArr(handles);
+
+    var params = getParameters();
+
+    var url_name = params[0];
+
+    if (url_name) {
+        setName(url_name);
+        setSuggest(url_name);
+        document.getElementById("namehaha").value = url_name;
+    } else {
+        setName(randName);
+        setSuggest(randName);
+    }
+}
+
 var handles = [
     "caeserlettuce",
     "zesty.lemony",
@@ -49,11 +78,10 @@ var handles = [
     "DarkMewtwoXD"
 ]
 
-var randName = getRandomFromArr(handles);
 
-setName(randName);
-setSuggest(randName);
+
 resizeText();
+randomName();
 
 //window.addEventListener('resize', resizeText());
 
